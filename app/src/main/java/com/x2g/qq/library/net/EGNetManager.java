@@ -4,9 +4,9 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 
-public class NetManager {
+public class EGNetManager {
 
-    private static NetManager mInstance;
+    private static EGNetManager mInstance;
 
     private static OkHttpClient mHttpClient;
     private long index;
@@ -16,22 +16,22 @@ public class NetManager {
         DEBUG = debug;
     }
 
-    private NetManager() {
+    private EGNetManager() {
         mHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .build();
     }
 
-    public static NetManager getInstance() {
+    public static EGNetManager getInstance() {
         if (mInstance == null) {
-            mInstance = new NetManager();
+            mInstance = new EGNetManager();
         }
         return mInstance;
     }
 
-    public NetRequest newRequest() {
+    public EGNetRequest newRequest() {
         index++;
-        return new NetRequest(mHttpClient, index);
+        return new EGNetRequest(mHttpClient, index);
     }
 
     public static void setOutTome(int outTome) {

@@ -18,7 +18,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class NetRequest {
+public class EGNetRequest {
 
     private static final int REQUEST_METHOD_GET = 0;
     private static final int REQUEST_METHOD_POST = 1;
@@ -26,7 +26,7 @@ public class NetRequest {
     private OkHttpClient mClient;
     private long id;
 
-    public NetRequest(OkHttpClient mClient, long id) {
+    public EGNetRequest(OkHttpClient mClient, long id) {
         this.mClient = mClient;
         this.id = id;
     }
@@ -37,43 +37,43 @@ public class NetRequest {
     private HashMap<String, String> headerMap = new HashMap<>();
     private HashMap<String, String> fileMap = new HashMap<>();
 
-    public NetRequest get() {
+    public EGNetRequest get() {
         this.method = REQUEST_METHOD_GET;
         return this;
     }
 
-    public NetRequest post() {
+    public EGNetRequest post() {
         this.method = REQUEST_METHOD_POST;
         return this;
     }
 
-    public NetRequest url(String url) {
+    public EGNetRequest url(String url) {
         this.url = url;
         return this;
     }
 
-    public NetRequest addParam(String key, String value) {
+    public EGNetRequest addParam(String key, String value) {
         if (!TextUtils.isEmpty(key)) {
             paramMap.put(key, value);
         }
         return this;
     }
 
-    public NetRequest addHeader(String key, String value) {
+    public EGNetRequest addHeader(String key, String value) {
         if (!TextUtils.isEmpty(key)) {
             headerMap.put(key, value);
         }
         return this;
     }
 
-    public NetRequest addFile(String key, String filePath) {
+    public EGNetRequest addFile(String key, String filePath) {
         if (!TextUtils.isEmpty(key)) {
             fileMap.put(key, filePath);
         }
         return this;
     }
 
-    public void enqueue(final NetListener listener) {
+    public void enqueue(final EGNetListener listener) {
         Observable
                 .create((ObservableOnSubscribe<String>) emitter -> {
                     StringBuilder sb = new StringBuilder();
@@ -105,7 +105,7 @@ public class NetRequest {
                     }
                     sb.append("||\t").append("Headers\t").append(headerMap.toString()).append("\n");
                     sb.append("======================\t\t").append(id).append("\tRequest\tEnd\t\t").append("======================\n");
-                    NetLog.i(sb.toString());
+                    EGNetLog.i(sb.toString());
                     final Request request = builder.build();
                     Call call = mClient.newCall(request);
                     call.enqueue(new Callback() {
@@ -131,7 +131,7 @@ public class NetRequest {
                 .subscribe(new Observer<String>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        NetLog.i(" \n>>>>>>\tonSubscribe");
+                        EGNetLog.i(" \n>>>>>>\tonSubscribe");
                         if (listener != null) {
                             listener.onRequestStart();
                         }
@@ -139,7 +139,7 @@ public class NetRequest {
 
                     @Override
                     public void onNext(String json) {
-                        NetLog.i(" \n>>>>>>\tResponse\t" + json);
+                        EGNetLog.i(" \n>>>>>>\tResponse\t" + json);
                         if (listener != null) {
                             listener.onResponse(json);
                         }
@@ -147,7 +147,7 @@ public class NetRequest {
 
                     @Override
                     public void onError(Throwable e) {
-                        NetLog.e(" \n>>>>>>\tError\t" + e.getMessage(), e);
+                        EGNetLog.e(" \n>>>>>>\tError\t" + e.getMessage(), e);
                         if (listener != null) {
                             listener.onRequestEnd();
                             listener.onError(e.getMessage(), e);
@@ -156,7 +156,7 @@ public class NetRequest {
 
                     @Override
                     public void onComplete() {
-                        NetLog.i(" \n>>>>>>\tComplete\t");
+                        EGNetLog.i(" \n>>>>>>\tComplete\t");
                         if (listener != null) {
                             listener.onRequestEnd();
                         }

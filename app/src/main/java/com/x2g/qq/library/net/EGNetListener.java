@@ -1,6 +1,6 @@
 package com.x2g.qq.library.net;
 
-public interface NetListener {
+public interface EGNetListener {
 
     void onRequestStart();
 
